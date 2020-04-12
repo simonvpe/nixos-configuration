@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./base-configuration.nix
     ];
 
   nixpkgs.config.allowUnfree = true;
@@ -19,32 +20,8 @@
   boot.loader.grub.device = "nodev";
   boot.loader.grub.useOSProber = true;
   boot.loader.grub.configurationLimit = 2;
+  boot.loader.grub.efiInstallAsRemovable = true;
 
-  networking.wireless = {
-    # Enables wireless support via wpa_supplicant.
-    enable = true;
-    networks = {
-      AirLink2277b0 = {
-        psk = "riNMmF3W";
-      };
-      Headquarters-5G = {
-        psk = "allyourbaseare";
-      };
-      Strandhyddan = {
-	psk = "8972524000";
-      };
-      OnePlus3 = {
-        psk = "pappapappa";
-      };
-      "free.wifi" = {};
-    };
-  };
-
-  hardware.bumblebee.enable = true;
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
   console.font = "Lat2-Terminus16";
@@ -59,9 +36,6 @@
   environment.systemPackages = with pkgs; [
     wget
     vim
-    firefox
-    alacritty
-    dmenu
     git
   ];
 
@@ -78,26 +52,8 @@
     DefaultTimeoutStopSec = 5s
   '';
 
-  # List services that you want to enable:
-  services = {
-    upower.enable = true;
-    emacs = {
-      enable = true;
-      #package = (import ./emacs/emacs.nix {pkgs = pkgs;});
-    };
-    rabbitmq.enable = true;
-  };
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
 
   # Enable sound.
   sound.enable = true;
@@ -111,16 +67,19 @@
     layout = "dvorak";
     xkbVariant = "pc105";
     xkbOptions = "caps:swapescape";
-    dpi = 180;
 
-    # Enable touchpad support.
-    libinput.enable = true;
+    displayManager = {
+      lightdm.enable = true;
+      defaultSession = "none+i3";
+    };
 
-    desktopManager.xterm.enable = false;
+    desktopManager = {
+      xterm.enable = false;
+    };
 
-    displayManager.defaultSession = "none+xmonad";
-
-    windowManager.xmonad.enable = true;
+    windowManager = {
+      i3.enable = true;
+    };
   };
 
   fonts = {
