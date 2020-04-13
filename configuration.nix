@@ -34,10 +34,20 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget
-    vim
+    dropbox-cli
     git
+    vim
+    wget
   ];
+
+  networking.firewall = {
+    allowedTCPPorts = [
+      17500 # dropbox
+    ];
+    allowedUDPPorts = [
+      17500 # dropbox
+    ];
+  };
 
   # Fix cursor size
   environment.variables.XCURSOR_SIZE = "64";
@@ -118,6 +128,24 @@
   users.users.starlord = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "libvirtd" ]; # Enable ‘sudo’ for the user.
+  };
+
+  systemd.user.services.dropbox = {
+    description = "Dropbox";
+    wantedBy = [ "graphical-session.target" ];
+    environment = {
+      QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
+      QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+    };
+    serviceConfig = {
+      ExecStart = "${pkgs.dropbox.out}/bin/dropbox";
+      ExecReload = "${pkgs.coreutils.out}/bin/kill -HUP $MAINPID";
+      KillMode = "control-group";
+      Restart = "on-failure";
+      PrivateTmp = true;
+      ProtectSystem = "full";
+      Nice = 10;
+    };
   };
 
   # This value determines the NixOS release with which your system is to be
