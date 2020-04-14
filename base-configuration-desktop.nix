@@ -5,4 +5,6 @@
     dpi = 100;
     videoDrivers = [ "nvidia" ];
   };
+
+  boot.kernelModules = [ "kvm-amd" ];
 }
