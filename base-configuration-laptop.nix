@@ -33,6 +33,7 @@
     xserver = {
       dpi = 180;
       libinput.enable = true;
+      videoDrivers = [ "intel" ];
     };
     upower.enable = true;
   };
