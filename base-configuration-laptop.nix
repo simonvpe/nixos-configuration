@@ -18,7 +18,7 @@
     pulseaudio = {
       enable = true;
       extraModules = [ pkgs.pulseaudio-modules-bt ];
-      package = pkgs.pulsaudioFull;
+      package = pkgs.pulseaudioFull;
     };
 
     opengl = {
