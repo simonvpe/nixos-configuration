@@ -7,4 +7,7 @@
   };
 
   boot.kernelModules = [ "kvm-amd" ];
+
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
 }

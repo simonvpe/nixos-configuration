@@ -1,7 +1,31 @@
 { config, lib, pkgs, ... }:
 
 {
-  hardware.bumblebee.enable = true;
+  hardware = {
+    cpu.intel.updateMicrocode = true;
+
+    nvidia = {
+      modesetting.enable = false;
+      optimus_prime = {
+        enable = false;
+        nvidiaBusId = "PCI:1:0:0";
+        intelBusId = "PCI:0:2:0";
+      };
+    };
+
+    pulseaudio = {
+      enable = true;
+      extraModules = [ pkgs.pulseaudio-modules-bt ];
+      package = pkgs.pulsaudioFull;
+    };
+
+    opengl = {
+      driSupport32Bit = true;
+      extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
+    };
+
+    bluetooth.enable = true;
+  };
 
   services = {
     xserver = {
@@ -11,25 +35,29 @@
     upower.enable = true;
   };
 
-  networking.wireless = {
-    # Enables wireless support via wpa_supplicant.
-    enable = true;
-    networks = {
-      AirLink2277b0 = {
-        psk = "riNMmF3W";
+  networking = {
+    wireless = {
+      # Enables wireless support via wpa_supplicant.
+      enable = true;
+      networks = {
+        AirLink2277b0 = {
+          psk = "riNMmF3W";
+        };
+        Headquarters-5G = {
+          psk = "allyourbaseare";
+        };
+        Strandhyddan = {
+          psk = "8972524000";
+        };
+        OnePlus3 = {
+          psk = "pappapappa";
+        };
+        "free.wifi" = {};
       };
-      Headquarters-5G = {
-        psk = "allyourbaseare";
-      };
-      Strandhyddan = {
-        psk = "8972524000";
-      };
-      OnePlus3 = {
-        psk = "pappapappa";
-      };
-      "free.wifi" = {};
     };
   };
 
-  services.xserver.dpi = 180;
+  sound = {
+    enable = true;
+  };
 }
