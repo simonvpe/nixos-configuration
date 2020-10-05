@@ -3,6 +3,8 @@
 {
   users.users.starlord = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" "libvirtd" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "docker" "libvirtd" "dialout" ]; # Enable ‘sudo’ for the user.
   };
+
+  nix.trustedUsers = [ "starlord" ];
 }
