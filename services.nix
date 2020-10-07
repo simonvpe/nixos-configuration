@@ -77,4 +77,5 @@
     SUBSYSTEM=="usb", ATTRS{idVendor}=="3016", ATTRS{idProduct}=="0001", MODE="0666"
   '';
 
+  services.lorri.enable = true;
 }
